@@ -1,6 +1,6 @@
 {
-  "name": "pebble-owm-weather",
-  "author": "Pebble Technology",
+  "name": "pebble-generic-weather",
+  "author": "Grégoire Sage",
   "version": "1.0.0",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
@@ -19,17 +19,22 @@
       "media": []
     },
     "messageKeys": [
+
       "Request",
+      "ApiKey",
+      "Provider",
+      "Latitude",
+      "Longitude",
+
       "Reply",
       "Description",
-      "DescriptionShort",
       "Name",
       "TempK",
-      "Pressure",
-      "WindSpeed",
-      "WindDirection",
+      "Day",
+      "ConditionCode",
       "BadKey",
       "LocationUnavailable"
+      
     ]
   }
 }
