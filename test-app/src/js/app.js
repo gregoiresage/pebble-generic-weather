@@ -1,6 +1,6 @@
-var OWMWeather = require('pebble-owm-weather');
+var GenericWeather = require('pebble-generic-weather');
 
-var owmWeather = new OWMWeather();
+var genericWeather = new GenericWeather();
 
 Pebble.addEventListener('ready', function(e) {
   console.log('PebbleKit JS ready!');
@@ -8,5 +8,5 @@ Pebble.addEventListener('ready', function(e) {
 
 Pebble.addEventListener('appmessage', function(e) {
   console.log('appmessage: ' + JSON.stringify(e.payload));
-  owmWeather.appMessageHandler(e);
+  genericWeather.appMessageHandler(e);
 });

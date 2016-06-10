@@ -1,46 +1,45 @@
 #include <pebble.h>
 
-#include <pebble-owm-weather/owm-weather.h>
+#include <pebble-generic-weather/pebble-generic-weather.h>
 #include <pebble-events/pebble-events.h>
 
 static Window *s_window;
 static TextLayer *s_text_layer;
 
-static void weather_callback(OWMWeatherInfo *info, OWMWeatherStatus status) {
+static void weather_callback(GenericWeatherInfo *info, GenericWeatherStatus status) {
   switch(status) {
-    case OWMWeatherStatusAvailable:
+    case GenericWeatherStatusAvailable:
     {
       static char s_buffer[256];
       snprintf(s_buffer, sizeof(s_buffer),
-        "Temperature (K/C/F): %d/%d/%d\n\nDescription/short:\n%s/%s\n\nPressure: %d\n\nWind speed/dir: %d/%d",
-        info->temp_k, info->temp_c, info->temp_f, info->description,
-        info->description_short, info->pressure, info->wind_speed, info->wind_direction);
+        "Temperature (K/C/F): %d/%d/%d\n\nName:\n%s\n\nDescription:\n%s",
+        info->temp_k, info->temp_c, info->temp_f, info->name, info->description);
       text_layer_set_text(s_text_layer, s_buffer);
     }
       break;
-    case OWMWeatherStatusNotYetFetched:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusNotYetFetched");
+    case GenericWeatherStatusNotYetFetched:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusNotYetFetched");
       break;
-    case OWMWeatherStatusBluetoothDisconnected:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusBluetoothDisconnected");
+    case GenericWeatherStatusBluetoothDisconnected:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusBluetoothDisconnected");
       break;
-    case OWMWeatherStatusPending:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusPending");
+    case GenericWeatherStatusPending:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusPending");
       break;
-    case OWMWeatherStatusFailed:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusFailed");
+    case GenericWeatherStatusFailed:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusFailed");
       break;
-    case OWMWeatherStatusBadKey:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusBadKey");
+    case GenericWeatherStatusBadKey:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusBadKey");
       break;
-    case OWMWeatherStatusLocationUnavailable:
-      text_layer_set_text(s_text_layer, "OWMWeatherStatusLocationUnavailable");
+    case GenericWeatherStatusLocationUnavailable:
+      text_layer_set_text(s_text_layer, "GenericWeatherStatusLocationUnavailable");
       break;
   }
 }
 
 static void js_ready_handler(void *context) {
-  owm_weather_fetch(weather_callback);
+  generic_weather_fetch(weather_callback);
 }
 
 static void window_load(Window *window) {
@@ -70,15 +69,17 @@ static void init() {
   window_stack_push(s_window, true);
 
   // Replace this with your own API key from OpenWeatherMap.org
-  char *api_key = "12341234123412341234123412341234";
-  owm_weather_init(api_key);
+  char *api_key = "123456123456123456";
+  generic_weather_init();
+  generic_weather_set_api_key(api_key);
+  generic_weather_set_provider(GenericWeatherProviderOpenWeatherMap);
   events_app_message_open();
 
   app_timer_register(3000, js_ready_handler, NULL);
 }
 
 static void deinit() {
-  owm_weather_deinit();
+  generic_weather_deinit();
 }
 
 int main() {
