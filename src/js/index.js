@@ -51,16 +51,16 @@ var GenericWeather = function() {
           default : condition = conditions.Unknown; break;
         }
         Pebble.sendAppMessage({
-          'Reply': 1,
-          'TempK': Math.round(json.main.temp),
-          'Name': json.name,
-          'Description': json.weather[0].description,
-          'Day': json.weather[0].icon.substring(2,3) === 'd' ? 1 : 0,
-          'ConditionCode': condition
+          'GW_REPLY': 1,
+          'GW_TEMPK': Math.round(json.main.temp),
+          'GW_NAME': json.name,
+          'GW_DESCRIPTION': json.weather[0].description,
+          'GW_DAY': json.weather[0].icon.substring(2,3) === 'd' ? 1 : 0,
+          'GW_CONDITIONCODE': condition
         });
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
-        Pebble.sendAppMessage({ 'BadKey': 1 });
+        Pebble.sendAppMessage({ 'GW_BADKEY': 1 });
       }
     }.bind(this));
   };
@@ -106,16 +106,16 @@ var GenericWeather = function() {
           condition = conditions.Unknown;
         }
         Pebble.sendAppMessage({
-          'Reply': 1,
-          'TempK': Math.round(json.current_observation.temp_c + 273.15),
-          'Name': json.current_observation.display_location.city,
-          'Description': json.current_observation.weather,
-          'Day': json.current_observation.icon_url.indexOf("nt_") == -1 ? 1 : 0,
-          'ConditionCode':condition
+          'GW_REPLY': 1,
+          'GW_TEMPK': Math.round(json.current_observation.temp_c + 273.15),
+          'GW_NAME': json.current_observation.display_location.city,
+          'GW_DESCRIPTION': json.current_observation.weather,
+          'GW_DAY': json.current_observation.icon_url.indexOf("nt_") == -1 ? 1 : 0,
+          'GW_CONDITIONCODE':condition
         });
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
-        Pebble.sendAppMessage({ 'BadKey': 1 });
+        Pebble.sendAppMessage({ 'GW_BADKEY': 1 });
       }
     }.bind(this));
   };
@@ -159,11 +159,11 @@ var GenericWeather = function() {
         }
 
         var message = {
-          'Reply': 1,
-          'TempK': Math.round(json.currently.temperature + 273.15),
-          'Description': json.currently.summary,
-          'Day': json.currently.icon.indexOf("-day") > 0 ? 1 : 0,
-          'ConditionCode':condition
+          'GW_REPLY': 1,
+          'GW_TEMPK': Math.round(json.currently.temperature + 273.15),
+          'GW_DESCRIPTION': json.currently.summary,
+          'GW_DAY': json.currently.icon.indexOf("-day") > 0 ? 1 : 0,
+          'GW_CONDITIONCODE':condition
         };
 
         url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + coords.latitude + '&lon=' + coords.longitude;
@@ -171,7 +171,7 @@ var GenericWeather = function() {
           if(req.status == 200) {
             var json = JSON.parse(req.response);
             var city = json.address.village || json.address.town || json.address.city || json.address.county || '';
-            message['Name'] = city;
+            message['GW_NAME'] = city;
             Pebble.sendAppMessage(message);
           } else {
             // console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
@@ -180,7 +180,7 @@ var GenericWeather = function() {
 
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
-        Pebble.sendAppMessage({ 'BadKey': 1 });
+        Pebble.sendAppMessage({ 'GW_BADKEY': 1 });
       }
     }.bind(this));
   };
@@ -207,7 +207,7 @@ var GenericWeather = function() {
   };
 
   this.appMessageHandler = function(dict, options) {
-    if(dict.payload['Request']) {
+    if(dict.payload['GW_REQUEST']) {
 
       console.log('generic-weather: Got fetch request from C app');
 
@@ -217,23 +217,23 @@ var GenericWeather = function() {
       if(options && 'apiKey' in options){
         this._apiKey = options['apiKey'];
       }
-      else if(dict.payload && 'ApiKey' in dict.payload){
-        this._apiKey = dict.payload['ApiKey'];
+      else if(dict.payload && 'GW_APIKEY' in dict.payload){
+        this._apiKey = dict.payload['GW_APIKEY'];
       }
 
       if(options && 'provider' in options){
         this._provider = options['provider'];
       }
-      else if(dict.payload && 'Provider' in dict.payload){
-        this._provider = dict.payload['Provider'];
+      else if(dict.payload && 'GW_PROVIDER' in dict.payload){
+        this._provider = dict.payload['GW_PROVIDER'];
       }
 
       var location = undefined;
       if(options && 'location' in options){
         location = options['location'];
       }
-      else if(dict.payload && 'Latitude' in dict.payload && 'Longitude' in dict.payload){
-        location = { 'latitude' : dict.payload['Latitude'] * 100000, 'longitude' : dict.payload['Longitude'] * 100000};
+      else if(dict.payload && 'GW_LATITUDE' in dict.payload && 'GW_LONGITUDE' in dict.payload){
+        location = { 'latitude' : dict.payload['GW_LATITUDE'] * 100000, 'longitude' : dict.payload['GW_LONGITUDE'] * 100000};
       }
 
       if(location) {

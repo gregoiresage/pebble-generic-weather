@@ -1,7 +1,7 @@
 {
   "name": "pebble-generic-weather",
   "author": "Grégoire Sage",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
   "dependencies": {
@@ -20,20 +20,20 @@
     },
     "messageKeys": [
 
-      "Request",
-      "ApiKey",
-      "Provider",
-      "Latitude",
-      "Longitude",
+      "GW_REQUEST",
+      "GW_APIKEY",
+      "GW_PROVIDER",
+      "GW_LATITUDE",
+      "GW_LONGITUDE",
 
-      "Reply",
-      "Description",
-      "Name",
-      "TempK",
-      "Day",
-      "ConditionCode",
-      "BadKey",
-      "LocationUnavailable"
+      "GW_REPLY",
+      "GW_DESCRIPTION",
+      "GW_NAME",
+      "GW_TEMPK",
+      "GW_DAY",
+      "GW_CONDITIONCODE",
+      "GW_BADKEY",
+      "GW_LOCATIONUNAVAILABLE"
       
     ]
   }
