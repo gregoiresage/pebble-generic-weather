@@ -33,7 +33,6 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     s_info->condition = condition_tuple->value->int32;
 
     s_status = GenericWeatherStatusAvailable;
-    app_message_deregister_callbacks();
     s_callback(s_info, s_status);
   }
 
