@@ -43,9 +43,9 @@ typedef struct {
   //! Name of the location from the weather feed
   char name[GENERIC_WEATHER_BUFFER_SIZE];
   //! Temperature in degrees Kelvin
-  uint16_t temp_k;
-  uint16_t temp_c;
-  uint16_t temp_f;
+  int16_t temp_k;
+  int16_t temp_c;
+  int16_t temp_f;
   //! day or night ?
   bool day;
   //! Condition code (see GenericWeatherConditionCode values)

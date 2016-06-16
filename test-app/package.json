@@ -24,6 +24,6 @@
     "pebble-app"
   ],
   "dependencies": {
-    "pebble-generic-weather": "../"
+    "pebble-generic-weather": "^1.0.0"
   }
 }
