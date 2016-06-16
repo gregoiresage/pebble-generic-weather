@@ -21,7 +21,7 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     strncpy(s_info->name, name_tuple->value->cstring, GENERIC_WEATHER_BUFFER_SIZE);
 
     Tuple *temp_tuple = dict_find(iter, MESSAGE_KEY_TempK);
-    s_info->temp_k = temp_tuple->value->int32;
+    s_info->temp_k = (int16_t)temp_tuple->value->int32;
     s_info->temp_c = s_info->temp_k - 273;
     s_info->temp_f = ((s_info->temp_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
     s_info->timestamp = time(NULL);
