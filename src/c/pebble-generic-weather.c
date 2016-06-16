@@ -12,37 +12,37 @@ static GenericWeatherProvider s_provider;
 static GenericWeatherCoordinates s_coordinates;
 
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
-  Tuple *reply_tuple = dict_find(iter, MESSAGE_KEY_Reply);
+  Tuple *reply_tuple = dict_find(iter, MESSAGE_KEY_GW_REPLY);
   if(reply_tuple) {
-    Tuple *desc_tuple = dict_find(iter, MESSAGE_KEY_Description);
+    Tuple *desc_tuple = dict_find(iter, MESSAGE_KEY_GW_DESCRIPTION);
     strncpy(s_info->description, desc_tuple->value->cstring, GENERIC_WEATHER_BUFFER_SIZE);
 
-    Tuple *name_tuple = dict_find(iter, MESSAGE_KEY_Name);
+    Tuple *name_tuple = dict_find(iter, MESSAGE_KEY_GW_NAME);
     strncpy(s_info->name, name_tuple->value->cstring, GENERIC_WEATHER_BUFFER_SIZE);
 
-    Tuple *temp_tuple = dict_find(iter, MESSAGE_KEY_TempK);
+    Tuple *temp_tuple = dict_find(iter, MESSAGE_KEY_GW_TEMPK);
     s_info->temp_k = (int16_t)temp_tuple->value->int32;
     s_info->temp_c = s_info->temp_k - 273;
     s_info->temp_f = ((s_info->temp_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
     s_info->timestamp = time(NULL);
 
-    Tuple *day_tuple = dict_find(iter, MESSAGE_KEY_Day);
+    Tuple *day_tuple = dict_find(iter, MESSAGE_KEY_GW_DAY);
     s_info->day = day_tuple->value->int32 == 1;
 
-    Tuple *condition_tuple = dict_find(iter, MESSAGE_KEY_ConditionCode);
+    Tuple *condition_tuple = dict_find(iter, MESSAGE_KEY_GW_CONDITIONCODE);
     s_info->condition = condition_tuple->value->int32;
 
     s_status = GenericWeatherStatusAvailable;
     s_callback(s_info, s_status);
   }
 
-  Tuple *err_tuple = dict_find(iter, MESSAGE_KEY_BadKey);
+  Tuple *err_tuple = dict_find(iter, MESSAGE_KEY_GW_BADKEY);
   if(err_tuple) {
     s_status = GenericWeatherStatusBadKey;
     s_callback(s_info, s_status);
   }
 
-  err_tuple = dict_find(iter, MESSAGE_KEY_LocationUnavailable);
+  err_tuple = dict_find(iter, MESSAGE_KEY_GW_LOCATIONUNAVAILABLE);
   if(err_tuple) {
     s_status = GenericWeatherStatusLocationUnavailable;
     s_callback(s_info, s_status);
@@ -63,17 +63,17 @@ static bool fetch() {
     return false;
   }
 
-  dict_write_uint8(out, MESSAGE_KEY_Request, 1);
+  dict_write_uint8(out, MESSAGE_KEY_GW_REQUEST, 1);
 
   if(strlen(s_api_key) > 0)
-    dict_write_cstring(out, MESSAGE_KEY_ApiKey, s_api_key);
+    dict_write_cstring(out, MESSAGE_KEY_GW_APIKEY, s_api_key);
 
   if(s_provider != GenericWeatherProviderUnknown)
-    dict_write_int32(out, MESSAGE_KEY_Provider, s_provider);
+    dict_write_int32(out, MESSAGE_KEY_GW_PROVIDER, s_provider);
 
   if(s_coordinates.latitude != (int32_t)0xFFFFFFFF && s_coordinates.longitude != (int32_t)0xFFFFFFFF){
-    dict_write_int32(out, MESSAGE_KEY_Latitude, s_coordinates.latitude);
-    dict_write_int32(out, MESSAGE_KEY_Longitude, s_coordinates.longitude);
+    dict_write_int32(out, MESSAGE_KEY_GW_LATITUDE, s_coordinates.latitude);
+    dict_write_int32(out, MESSAGE_KEY_GW_LONGITUDE, s_coordinates.longitude);
   }
 
   result = app_message_outbox_send();
