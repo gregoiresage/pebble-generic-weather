@@ -233,7 +233,7 @@ var GenericWeather = function() {
         location = options['location'];
       }
       else if(dict.payload && 'GW_LATITUDE' in dict.payload && 'GW_LONGITUDE' in dict.payload){
-        location = { 'latitude' : dict.payload['GW_LATITUDE'] * 100000, 'longitude' : dict.payload['GW_LONGITUDE'] * 100000};
+        location = { 'latitude' : dict.payload['GW_LATITUDE'] / 100000, 'longitude' : dict.payload['GW_LONGITUDE'] / 100000};
       }
 
       if(location) {
