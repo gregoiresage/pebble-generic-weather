@@ -50,7 +50,6 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
 }
 
 static void fail_and_callback() {
-  APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to send request!");
   s_status = GenericWeatherStatusFailed;
   s_callback(s_info, s_status);
 }
@@ -121,12 +120,10 @@ void generic_weather_set_location(const GenericWeatherCoordinates coordinates){
 
 bool generic_weather_fetch(GenericWeatherCallback *callback) {
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return false;
   }
 
   if(!callback) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "GenericWeatherCallback was NULL!");
     return false;
   }
 
@@ -151,7 +148,6 @@ void generic_weather_deinit() {
 
 GenericWeatherInfo* generic_weather_peek() {
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return NULL;
   }
 
@@ -160,7 +156,6 @@ GenericWeatherInfo* generic_weather_peek() {
 
 void generic_weather_save(const uint32_t key){
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return;
   }
 
@@ -169,7 +164,6 @@ void generic_weather_save(const uint32_t key){
 
 void generic_weather_load(const uint32_t key){
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return;
   }
 
