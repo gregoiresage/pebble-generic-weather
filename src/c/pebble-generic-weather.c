@@ -11,6 +11,8 @@ static char s_api_key[33];
 static GenericWeatherProvider s_provider;
 static GenericWeatherCoordinates s_coordinates;
 
+static EventHandle s_event_handle;
+
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *reply_tuple = dict_find(iter, MESSAGE_KEY_GW_REPLY);
   if(reply_tuple) {
@@ -50,7 +52,6 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
 }
 
 static void fail_and_callback() {
-  APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to send request!");
   s_status = GenericWeatherStatusFailed;
   s_callback(s_info, s_status);
 }
@@ -99,7 +100,7 @@ void generic_weather_init() {
   s_status = GenericWeatherStatusNotYetFetched;
   events_app_message_request_inbox_size(200);
   events_app_message_request_outbox_size(100);
-  events_app_message_register_inbox_received(inbox_received_handler, NULL);
+  s_event_handle = events_app_message_register_inbox_received(inbox_received_handler, NULL);
 }
 
 void generic_weather_set_api_key(const char *api_key){
@@ -121,12 +122,10 @@ void generic_weather_set_location(const GenericWeatherCoordinates coordinates){
 
 bool generic_weather_fetch(GenericWeatherCallback *callback) {
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return false;
   }
 
   if(!callback) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "GenericWeatherCallback was NULL!");
     return false;
   }
 
@@ -146,12 +145,12 @@ void generic_weather_deinit() {
     free(s_info);
     s_info = NULL;
     s_callback = NULL;
+    events_app_message_unsubscribe(s_event_handle);
   }
 }
 
 GenericWeatherInfo* generic_weather_peek() {
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return NULL;
   }
 
@@ -160,7 +159,6 @@ GenericWeatherInfo* generic_weather_peek() {
 
 void generic_weather_save(const uint32_t key){
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return;
   }
 
@@ -169,7 +167,6 @@ void generic_weather_save(const uint32_t key){
 
 void generic_weather_load(const uint32_t key){
   if(!s_info) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Generic Weather library is not initialized!");
     return;
   }
 
