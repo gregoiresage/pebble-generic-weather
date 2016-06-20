@@ -11,6 +11,8 @@ static char s_api_key[33];
 static GenericWeatherProvider s_provider;
 static GenericWeatherCoordinates s_coordinates;
 
+static EventHandle s_event_handle;
+
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *reply_tuple = dict_find(iter, MESSAGE_KEY_GW_REPLY);
   if(reply_tuple) {
@@ -98,7 +100,7 @@ void generic_weather_init() {
   s_status = GenericWeatherStatusNotYetFetched;
   events_app_message_request_inbox_size(200);
   events_app_message_request_outbox_size(100);
-  events_app_message_register_inbox_received(inbox_received_handler, NULL);
+  s_event_handle = events_app_message_register_inbox_received(inbox_received_handler, NULL);
 }
 
 void generic_weather_set_api_key(const char *api_key){
@@ -143,6 +145,7 @@ void generic_weather_deinit() {
     free(s_info);
     s_info = NULL;
     s_callback = NULL;
+    events_app_message_unsubscribe(s_event_handle);
   }
 }
 
