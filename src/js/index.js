@@ -202,7 +202,7 @@ var GenericWeather = function() {
   this._onLocationError = function(err) {
     console.log('generic-weather: Location error');
     Pebble.sendAppMessage({
-      'LocationUnavailable': 1
+      'GW_LOCATIONUNAVAILABLE': 1
     });
   };
 
