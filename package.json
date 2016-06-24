@@ -17,6 +17,9 @@
       "diorite",
       "emery"
     ],
+    "capabilities": [
+      "location"
+    ],
     "resources": {
       "media": []
     },
