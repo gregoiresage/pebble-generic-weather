@@ -1,7 +1,7 @@
 {
   "name": "pebble-generic-weather",
   "author": "Grégoire Sage",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
   "dependencies": {
@@ -16,6 +16,9 @@
       "chalk",
       "diorite",
       "emery"
+    ],
+    "capabilities": [
+      "location"
     ],
     "resources": {
       "media": []
