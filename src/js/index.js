@@ -16,12 +16,17 @@ var GenericWeather = function() {
     Unknown         : 1000,
   };
 
-  this._xhrWrapper = function(url, type, callback) {
+  this._xhrWrapper = function(url, type, callback, customHeaderKey, customHeaderValue) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
       callback(xhr);
     };
     xhr.open(type, url);
+    
+    if (customHeaderKey && customHeaderValue) {
+      try {xhr.setRequestHeader(customHeaderKey, customHeaderValue);} catch(e){}
+    }
+    
     xhr.send();
   };
 
@@ -176,7 +181,7 @@ var GenericWeather = function() {
           } else {
             // console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
           }
-        }.bind(this));
+        }.bind(this), 'User-Agent', 'Pebble Generic Weather');
 
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
