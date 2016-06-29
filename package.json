@@ -1,9 +1,14 @@
 {
   "name": "pebble-generic-weather",
   "author": "Grégoire Sage",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gregoiresage/pebble-generic-weather"
+  },
   "dependencies": {
     "pebble-events": "^1.0.0"
   },
