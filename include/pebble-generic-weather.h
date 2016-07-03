@@ -52,6 +52,10 @@ typedef struct {
   GenericWeatherConditionCode condition;
   //! Date that the data was received
   time_t timestamp;
+  //! Sunrise time UTC
+  time_t timesunrise;
+  //! Sunset time UTC
+  time_t timesunset;
 } GenericWeatherInfo;
 
 //! Possible weather providers

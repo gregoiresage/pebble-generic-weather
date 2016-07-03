@@ -71,6 +71,6 @@ Read `include/pebble-generic-weather.h` for function and `enum` documentation.
 
 **Available now**
 
-* Description, temperature in K/C/F, location name, condition code, day/night status.
+* Description, temperature in K/C/F, location name, condition code, day/night status, sunrise/sunset
 
 

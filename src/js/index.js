@@ -1,3 +1,5 @@
+var SunCalc = require('suncalc');
+
 var GenericWeather = function() {
   
   this._apiKey    = '';
@@ -42,6 +44,8 @@ var GenericWeather = function() {
       if(req.status == 200) {
         var json = JSON.parse(req.response);
 
+        // console.log(req.response);
+
         var condition = parseInt(json.weather[0].icon.substring(0,2), 10);
         switch(condition){     
           case 1 :  condition = conditions.ClearSky; break;
@@ -61,7 +65,9 @@ var GenericWeather = function() {
           'GW_NAME': json.name,
           'GW_DESCRIPTION': json.weather[0].description,
           'GW_DAY': json.weather[0].icon.substring(2,3) === 'd' ? 1 : 0,
-          'GW_CONDITIONCODE': condition
+          'GW_CONDITIONCODE': condition,
+          'GW_SUNRISE': json.sys.sunrise,
+          'GW_SUNSET': json.sys.sunset
         });
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
@@ -81,6 +87,8 @@ var GenericWeather = function() {
       console.log('weather: Got API response!');
       if(req.status == 200) {
         var json = JSON.parse(req.response);
+
+        // console.log(req.response);
 
         var condition = json.current_observation.icon;
         if(condition === 'clear'){
@@ -110,13 +118,18 @@ var GenericWeather = function() {
         else {
           condition = conditions.Unknown;
         }
+
+        var times = SunCalc.getTimes(new Date(), coords.latitude, coords.longitude);
+
         Pebble.sendAppMessage({
           'GW_REPLY': 1,
           'GW_TEMPK': Math.round(json.current_observation.temp_c + 273.15),
           'GW_NAME': json.current_observation.display_location.city,
           'GW_DESCRIPTION': json.current_observation.weather,
           'GW_DAY': json.current_observation.icon_url.indexOf("nt_") == -1 ? 1 : 0,
-          'GW_CONDITIONCODE':condition
+          'GW_CONDITIONCODE':condition,
+          'GW_SUNRISE': Math.round(+times.sunrise/1000),
+          'GW_SUNSET': Math.round(+times.sunset/1000)
         });
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
@@ -127,7 +140,7 @@ var GenericWeather = function() {
 
   this._getWeatherF_IO = function(coords) {
     var url = 'https://api.forecast.io/forecast/' + this._apiKey + '/'
-      + coords.latitude + ',' + coords.longitude + '?exclude=minutely,hourly,daily,alerts,flag&units=si';
+      + coords.latitude + ',' + coords.longitude + '?exclude=minutely,hourly,alerts,flags&units=si';
 
     console.log('weather: Contacting forecast.io...');
     // console.log(url);
@@ -136,6 +149,8 @@ var GenericWeather = function() {
       console.log('weather: Got API response!');
       if(req.status == 200) {
         var json = JSON.parse(req.response);
+
+        // console.log(req.response);
 
         var condition = json.currently.icon;
         if(condition === 'clear-day' || condition === 'clear-night'){
@@ -168,7 +183,9 @@ var GenericWeather = function() {
           'GW_TEMPK': Math.round(json.currently.temperature + 273.15),
           'GW_DESCRIPTION': json.currently.summary,
           'GW_DAY': json.currently.icon.indexOf("-day") > 0 ? 1 : 0,
-          'GW_CONDITIONCODE':condition
+          'GW_CONDITIONCODE':condition,
+          'GW_SUNRISE': json.daily.data[0].sunriseTime,
+          'GW_SUNSET': json.daily.data[0].sunsetTime
         };
 
         url = 'http://nominatim.openstreetmap.org/reverse?format=json&lat=' + coords.latitude + '&lon=' + coords.longitude;
