@@ -34,6 +34,12 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     Tuple *condition_tuple = dict_find(iter, MESSAGE_KEY_GW_CONDITIONCODE);
     s_info->condition = condition_tuple->value->int32;
 
+    Tuple *sunrise_tuple = dict_find(iter, MESSAGE_KEY_GW_SUNRISE);
+    s_info->timesunrise = sunrise_tuple->value->int32;
+
+    Tuple *sunset_tuple = dict_find(iter, MESSAGE_KEY_GW_SUNSET);
+    s_info->timesunset = sunset_tuple->value->int32;
+
     s_status = GenericWeatherStatusAvailable;
     s_callback(s_info, s_status);
   }
