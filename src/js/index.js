@@ -175,7 +175,7 @@ var GenericWeather = function() {
         this._xhrWrapper(url, 'GET', function(req) {
           if(req.status == 200) {
             var json = JSON.parse(req.response);
-            var city = json.address.village || json.address.town || json.address.city || json.address.county || '';
+            var city = json.address.hamlet || json.address.village || json.address.town || json.address.city || json.address.county || '';
             message['GW_NAME'] = city;
             Pebble.sendAppMessage(message);
           } else {
