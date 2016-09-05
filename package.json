@@ -48,7 +48,8 @@
       "GW_SUNRISE",
       "GW_SUNSET",
       "GW_BADKEY",
-      "GW_LOCATIONUNAVAILABLE"
+      "GW_LOCATIONUNAVAILABLE",
+      "GW_FEELS_LIKE"
     ]
   }
 }

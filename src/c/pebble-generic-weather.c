@@ -10,6 +10,7 @@ static GenericWeatherStatus s_status;
 static char s_api_key[33];
 static GenericWeatherProvider s_provider;
 static GenericWeatherCoordinates s_coordinates;
+static bool s_feels_like;
 
 static EventHandle s_event_handle;
 
@@ -83,6 +84,10 @@ static bool fetch() {
     dict_write_int32(out, MESSAGE_KEY_GW_LONGITUDE, s_coordinates.longitude);
   }
 
+  if(s_feels_like){
+    dict_write_int8(out, MESSAGE_KEY_GW_FEELS_LIKE, s_feels_like);
+  }
+
   result = app_message_outbox_send();
   if(result != APP_MSG_OK) {
     fail_and_callback();
@@ -124,6 +129,10 @@ void generic_weather_set_provider(GenericWeatherProvider provider){
 
 void generic_weather_set_location(const GenericWeatherCoordinates coordinates){
   s_coordinates = coordinates;
+}
+
+void generic_weather_set_feels_like(const bool feels_like) {
+  s_feels_like = feels_like;
 }
 
 bool generic_weather_fetch(GenericWeatherCallback *callback) {

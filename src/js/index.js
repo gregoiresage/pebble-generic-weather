@@ -4,6 +4,7 @@ var GenericWeather = function() {
   
   this._apiKey    = '';
   this._provider  = GenericWeather.ProviderOpenWeatherMap;
+  this._feelsLike = false;
 
   var conditions = {
     ClearSky        : 0,
@@ -120,10 +121,11 @@ var GenericWeather = function() {
         }
 
         var times = SunCalc.getTimes(new Date(), coords.latitude, coords.longitude);
+        var temp = this._feelsLike ? parseFloat(json.current_observation.feelslike_c) : json.current_observation.temp_c;
 
         Pebble.sendAppMessage({
           'GW_REPLY': 1,
-          'GW_TEMPK': Math.round(json.current_observation.temp_c + 273.15),
+          'GW_TEMPK': Math.round(temp + 273.15),
           'GW_NAME': json.current_observation.display_location.city,
           'GW_DESCRIPTION': json.current_observation.weather,
           'GW_DAY': json.current_observation.icon_url.indexOf("nt_") == -1 ? 1 : 0,
@@ -178,9 +180,11 @@ var GenericWeather = function() {
           condition = conditions.Unknown;
         }
 
+        var temp = this._feelsLike ? json.currently.apparentTemperature : json.currently.temperature;
+
         var message = {
           'GW_REPLY': 1,
-          'GW_TEMPK': Math.round(json.currently.temperature + 273.15),
+          'GW_TEMPK': Math.round(temp + 273.15),
           'GW_DESCRIPTION': json.currently.summary,
           'GW_DAY': json.currently.icon.indexOf("-day") > 0 ? 1 : 0,
           'GW_CONDITIONCODE':condition,
@@ -256,6 +260,13 @@ var GenericWeather = function() {
       }
       else if(dict.payload && 'GW_LATITUDE' in dict.payload && 'GW_LONGITUDE' in dict.payload){
         location = { 'latitude' : dict.payload['GW_LATITUDE'] / 100000, 'longitude' : dict.payload['GW_LONGITUDE'] / 100000};
+      }
+
+      if(options && 'feelsLike' in options){
+        this._feelsLike = options['feelsLike'];
+      }
+      else if(dict.payload && 'GW_FEELS_LIKE' in dict.payload){
+        this._feelsLike = dict.payload['GW_FEELS_LIKE'] > 0;
       }
 
       if(location) {

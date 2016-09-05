@@ -101,6 +101,10 @@ void generic_weather_set_provider(GenericWeatherProvider provider);
 //! @param coordinates The coordinates (default is GENERIC_WEATHER_GPS_LOCATION)
 void generic_weather_set_location(const GenericWeatherCoordinates coordinates);
 
+//! Use "feels like" temperature or not
+//! @param feels_like The "feels like" setting (default is false)
+void generic_weather_set_feels_like(const bool feels_like);
+
 //! Important: This uses the AppMessage system. You should only use AppMessage yourself
 //! either before calling this, or after you have obtained your weather data.
 //! @param callback Callback to be called once the weather.
