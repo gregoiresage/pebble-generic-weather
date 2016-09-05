@@ -48,6 +48,8 @@ so you can initialise it:
 
 * Call `generic_weather_set_api_key("myapikey")` to configure your api key for the provider.
 
+* Call `generic_weather_set_feels_like(true || false)` to configure whether or not to use "feels like" temperature if available.
+
 * Call `events_app_message_open()` after `generic_weather_init` and any other libraries you need to init.
 
 * Call `generic_weather_fetch()` after PebbleKit JS is ready, and supply a suitable

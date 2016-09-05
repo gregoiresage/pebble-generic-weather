@@ -1,7 +1,7 @@
 {
   "name": "pebble-generic-weather",
   "author": "Grégoire Sage",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "files": [
     "dist.zip"
   ],
@@ -48,7 +48,8 @@
       "GW_SUNRISE",
       "GW_SUNSET",
       "GW_BADKEY",
-      "GW_LOCATIONUNAVAILABLE"
+      "GW_LOCATIONUNAVAILABLE",
+      "GW_FEELS_LIKE"
     ]
   }
 }
