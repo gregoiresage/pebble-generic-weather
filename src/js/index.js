@@ -65,7 +65,7 @@ var GenericWeather = function() {
           'GW_TEMPK': Math.round(json.main.temp),
           'GW_NAME': json.name,
           'GW_DESCRIPTION': json.weather[0].description,
-          'GW_DAY': json.weather[0].icon.substring(2,3) === 'd' ? 1 : 0,
+          'GW_DAY': (json.dt > json.sys.sunrise && json.dt < json.sys.sunset) ? 1 : 0,
           'GW_CONDITIONCODE': condition,
           'GW_SUNRISE': json.sys.sunrise,
           'GW_SUNSET': json.sys.sunset
