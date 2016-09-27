@@ -67,7 +67,7 @@ Read `include/pebble-generic-weather.h` for function and `enum` documentation.
 
 * [WeatherUnderGround](https://www.wunderground.com)
 
-* [Forecast.io](http://forecast.io)
+* [Dark Sky](https://darksky.net) (formally known as Forecast.io)
 
 ## Data returned
 

@@ -64,8 +64,8 @@ typedef enum {
   GenericWeatherProviderOpenWeatherMap      = 0,
   //! WeatherUnderground
   GenericWeatherProviderWeatherUnderground  = 1,
-  //! Forecast.io
-  GenericWeatherProviderForecastIo          = 2,
+  //! Dark Sky (formally Forecast.io)
+  GenericWeatherProviderDarkSky             = 2,
 
   GenericWeatherProviderUnknown             = 1000,
 } GenericWeatherProvider;

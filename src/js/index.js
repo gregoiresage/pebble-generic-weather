@@ -140,11 +140,11 @@ var GenericWeather = function() {
     }.bind(this));
   };
 
-  this._getWeatherF_IO = function(coords) {
-    var url = 'https://api.forecast.io/forecast/' + this._apiKey + '/'
+  this._getWeatherDS = function(coords) {
+    var url = 'https://api.darksky.net/forecast/' + this._apiKey + '/'
       + coords.latitude + ',' + coords.longitude + '?exclude=minutely,hourly,alerts,flags&units=si';
 
-    console.log('weather: Contacting forecast.io...');
+    console.log('weather: Contacting Dark Sky..');
     // console.log(url);
 
     this._xhrWrapper(url, 'GET', function(req) {
@@ -215,7 +215,7 @@ var GenericWeather = function() {
     switch(this._provider){
       case GenericWeather.ProviderOpenWeatherMap :      this._getWeatherOWM(coords);  break;
       case GenericWeather.ProviderWeatherUnderground :  this._getWeatherWU(coords);   break;
-      case GenericWeather.ProviderForecastIo :          this._getWeatherF_IO(coords); break;
+      case GenericWeather.ProviderDarkSky :             this._getWeatherDS(coords); break;
       default: break;
     }
   };
@@ -288,6 +288,6 @@ var GenericWeather = function() {
 
 GenericWeather.ProviderOpenWeatherMap       = 0;
 GenericWeather.ProviderWeatherUnderground   = 1;
-GenericWeather.ProviderForecastIo           = 2;
+GenericWeather.ProviderDarkSky              = 2;
 
 module.exports = GenericWeather;
