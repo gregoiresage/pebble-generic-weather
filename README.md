@@ -69,6 +69,8 @@ Read `include/pebble-generic-weather.h` for function and `enum` documentation.
 
 * [Forecast.io](http://forecast.io)
 
+* [Yahoo! Weather](https://www.yahoo.com/news/weather)
+
 ## Data returned
 
 **Available now**
