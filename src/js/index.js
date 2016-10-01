@@ -48,7 +48,7 @@ var GenericWeather = function() {
         // console.log(req.response);
 
         var condition = parseInt(json.weather[0].icon.substring(0,2), 10);
-        switch(condition){     
+        switch(condition){
           case 1 :  condition = conditions.ClearSky; break;
           case 2 :  condition = conditions.FewClouds;  break;
           case 3 :  condition = conditions.ScatteredClouds;  break;
@@ -65,7 +65,7 @@ var GenericWeather = function() {
           'GW_TEMPK': Math.round(json.main.temp),
           'GW_NAME': json.name,
           'GW_DESCRIPTION': json.weather[0].description,
-          'GW_DAY': json.weather[0].icon.substring(2,3) === 'd' ? 1 : 0,
+          'GW_DAY': (json.dt > json.sys.sunrise && json.dt < json.sys.sunset) ? 1 : 0,
           'GW_CONDITIONCODE': condition,
           'GW_SUNRISE': json.sys.sunrise,
           'GW_SUNSET': json.sys.sunset
@@ -211,11 +211,107 @@ var GenericWeather = function() {
     }.bind(this));
   };
 
+  this._getWeatherYahoo = function(coords) {
+    var url = 'https://query.yahooapis.com/v1/public/yql?q=select astronomy, location.city, item.condition from weather.forecast where woeid in '+
+            '(select woeid from geo.places(1) where text=\'(' + coords.latitude+','+coords.longitude+')\') and u=\'c\'&format=json';
+
+    console.log('weather: Contacting Yahoo! Weather...');
+    // console.log(url);
+
+    this._xhrWrapper(url, 'GET', function(req) {
+      console.log('weather: Got API response!');
+      if(req.status == 200) {
+        var json = JSON.parse(req.response);
+
+        // console.log(req.response);
+
+        var condition = parseInt(json.query.results.channel.item.condition.code);
+        switch(condition){
+          case 31 :
+          case 32 :
+          case 33 :
+          case 34 :
+            condition = conditions.ClearSky;  break;
+          case 29 :
+          case 30 :
+          case 44 :
+            condition = conditions.FewClouds;  break;
+          case 8 :
+          case 9 :
+            condition = conditions.ShowerRain;  break;
+          case 6 :
+          case 10 :
+          case 11 :
+          case 12 :
+          case 35 :
+          case 40 :
+            condition = conditions.Rain; break;
+          case 1 :
+          case 3 :
+          case 4 :
+          case 37 :
+          case 38 :
+          case 39 :
+          case 47 :
+            condition = conditions.Thunderstorm; break;
+          case 5 :
+          case 7 :
+          case 13 :
+          case 14 :
+          case 15 :
+          case 41 :
+          case 42 :
+          case 43 :
+            condition = conditions.Snow; break;
+          case 20 :
+            condition = conditions.Mist; break;
+          default : condition = conditions.Unknown; break;
+        }
+        
+        var current_time = new Date();
+        var sunrise_time = TimeParse(json.query.results.channel.astronomy.sunrise);
+        var sunset_time = TimeParse(json.query.results.channel.astronomy.sunset);
+        var is_day = (current_time >  sunrise_time && current_time < sunset_time) ? 1 : 0;
+      
+        Pebble.sendAppMessage({
+          'GW_REPLY': 1,
+          'GW_TEMPK': Math.round(json.query.results.channel.item.condition.temp + 273.15),
+          'GW_NAME': json.query.results.channel.location.city;,
+          'GW_DESCRIPTION': json.query.results.channel.item.condition.text,
+          'GW_DAY': is_day ? 1 : 0,
+          'GW_CONDITIONCODE': condition,
+          'GW_SUNRISE': json.query.results.channel.astronomy.sunrise,
+          'GW_SUNSET': json.query.results.channel.astronomy.sunset
+        });
+      } else {
+        console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
+        Pebble.sendAppMessage({ 'GW_BADKEY': 1 });
+      }
+    }.bind(this));
+  };
+
+  function TimeParse(str) {
+    var buff = str.split(" ");
+    if(buff.length == 2) {
+      var time = buff[0].split(":");
+      if(buff[1].toLowerCase() == "pm" && parseInt(time[0]) != 12) {
+        time[0] = parseInt(time[0]) + 12;
+      }
+    }
+
+    var date = new Date();
+    date.setHours(time[0]);
+    date.setMinutes(time[1]);
+
+    return date;
+  }
+
   this._getWeather = function(coords) {
     switch(this._provider){
       case GenericWeather.ProviderOpenWeatherMap :      this._getWeatherOWM(coords);  break;
       case GenericWeather.ProviderWeatherUnderground :  this._getWeatherWU(coords);   break;
       case GenericWeather.ProviderForecastIo :          this._getWeatherF_IO(coords); break;
+      case GenericWeather.ProviderYahooWeather :        this._getWeatherYahoo_IO(coords); break;
       default: break;
     }
   };
@@ -289,5 +385,6 @@ var GenericWeather = function() {
 GenericWeather.ProviderOpenWeatherMap       = 0;
 GenericWeather.ProviderWeatherUnderground   = 1;
 GenericWeather.ProviderForecastIo           = 2;
+GenericWeather.ProviderYahooWeather         = 3;
 
 module.exports = GenericWeather;
