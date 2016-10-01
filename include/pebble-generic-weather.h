@@ -67,6 +67,9 @@ typedef enum {
   //! Forecast.io
   GenericWeatherProviderForecastIo          = 2,
 
+  //! Yahoo! Weather
+  GenericWeatherProviderYahooWeather        = 3,
+  
   GenericWeatherProviderUnknown             = 1000,
 } GenericWeatherProvider;
 
