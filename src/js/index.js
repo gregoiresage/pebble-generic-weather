@@ -275,7 +275,7 @@ var GenericWeather = function() {
       
         Pebble.sendAppMessage({
           'GW_REPLY': 1,
-          'GW_TEMPK': Math.round(json.query.results.channel.item.condition.temp + 273.15),
+          'GW_TEMPK': Math.round(parseInt(json.query.results.channel.item.condition.temp) + 273.15),
           'GW_NAME': json.query.results.channel.location.city,
           'GW_DESCRIPTION': json.query.results.channel.item.condition.text,
           'GW_DAY': is_day ? 1 : 0,
@@ -311,7 +311,7 @@ var GenericWeather = function() {
       case GenericWeather.ProviderOpenWeatherMap :      this._getWeatherOWM(coords);  break;
       case GenericWeather.ProviderWeatherUnderground :  this._getWeatherWU(coords);   break;
       case GenericWeather.ProviderForecastIo :          this._getWeatherF_IO(coords); break;
-      case GenericWeather.ProviderYahooWeather :        this._getWeatherYahoo_IO(coords); break;
+      case GenericWeather.ProviderYahooWeather :        this._getWeatherYahoo(coords); break;
       default: break;
     }
   };
