@@ -311,7 +311,7 @@ var GenericWeather = function() {
       case GenericWeather.ProviderOpenWeatherMap :      this._getWeatherOWM(coords);  break;
       case GenericWeather.ProviderWeatherUnderground :  this._getWeatherWU(coords);   break;
       case GenericWeather.ProviderForecastIo :          this._getWeatherF_IO(coords); break;
-      case GenericWeather.ProviderYahooWeather :        this._getWeatherYahoo_IO(coords); break;
+      case GenericWeather.ProviderYahooWeather :        this._getWeatherYahoo(coords); break;
       default: break;
     }
   };
