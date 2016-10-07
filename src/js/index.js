@@ -186,7 +186,7 @@ var GenericWeather = function() {
           'GW_REPLY': 1,
           'GW_TEMPK': Math.round(temp + 273.15),
           'GW_DESCRIPTION': json.currently.summary,
-          'GW_DAY': json.currently.icon.indexOf("-day") > 0 ? 1 : 0,
+          'GW_DAY': (json.currently.time > json.daily.data[0].sunriseTime && json.currently.time < json.daily.data[0].sunsetTime) ? 1 : 0,
           'GW_CONDITIONCODE':condition,
           'GW_SUNRISE': json.daily.data[0].sunriseTime,
           'GW_SUNSET': json.daily.data[0].sunsetTime
