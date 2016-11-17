@@ -218,7 +218,7 @@ var GenericWeather = function() {
     console.log('weather: Contacting Yahoo! Weather...');
     // console.log(url);
 
-    this._xhrWrapper(url, 'GET', function(req) {
+    this._xhrWrapper(encodeURI(url), 'GET', function(req) {
       console.log('weather: Got API response!');
       if(req.status == 200) {
         var json = JSON.parse(req.response);
