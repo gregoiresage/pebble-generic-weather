@@ -33,6 +33,7 @@ typedef enum {
   GenericWeatherConditionThunderstorm,
   GenericWeatherConditionSnow,
   GenericWeatherConditionMist,
+  GenericWeatherConditionWind,
   GenericWeatherConditionUnknown = 1000
 } GenericWeatherConditionCode;
 

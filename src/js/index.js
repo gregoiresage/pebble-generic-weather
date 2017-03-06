@@ -16,6 +16,7 @@ var GenericWeather = function() {
     Thunderstorm    : 6,
     Snow            : 7,
     Mist            : 8,
+    Wind            : 9,
     Unknown         : 1000,
   };
 
@@ -231,20 +232,25 @@ var GenericWeather = function() {
           case 32 :
           case 33 :
           case 34 :
+          case 36 :
             condition = conditions.ClearSky;  break;
           case 29 :
           case 30 :
           case 44 :
             condition = conditions.FewClouds;  break;
+          case 26 :
+          case 27 :
+          case 28 :
+            condition = conditions.BrokenClouds;  break;
           case 8 :
           case 9 :
+          case 11 :
+          case 12 :
+          case 40 :
             condition = conditions.ShowerRain;  break;
           case 6 :
           case 10 :
-          case 11 :
-          case 12 :
           case 35 :
-          case 40 :
             condition = conditions.Rain; break;
           case 1 :
           case 3 :
@@ -252,19 +258,30 @@ var GenericWeather = function() {
           case 37 :
           case 38 :
           case 39 :
-          case 47 :
+          case 45 :
+          case 47 :            
             condition = conditions.Thunderstorm; break;
           case 5 :
           case 7 :
           case 13 :
           case 14 :
           case 15 :
+          case 16 :
+          case 17 :
+          case 18 :
           case 41 :
           case 42 :
           case 43 :
+          case 46 :
             condition = conditions.Snow; break;
           case 20 :
+          case 21 :
+          case 22 :
             condition = conditions.Mist; break;
+          case 23 :
+          case 24 :
+          case 25 :
+            condition = conditions.Wind; break;            
           default : condition = conditions.Unknown; break;
         }
         
