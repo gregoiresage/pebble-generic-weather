@@ -93,7 +93,7 @@ var GenericWeather = function() {
         // console.log(req.response);
 
         var condition = json.current_observation.icon;
-        if(condition === 'clear'){
+        if(condition === 'clear' || condition === 'sunny'){
           condition = conditions.ClearSky;
         }
         else if(condition === 'mostlyysunny' || condition === 'partlycloudy'){
@@ -108,11 +108,14 @@ var GenericWeather = function() {
         else if(condition === 'rain'){
           condition = conditions.Rain;
         }
-        else if(condition === 'tstorm'){
+        else if(condition === 'chancerain' || condition === 'chancesleet'){
+          condition = conditions.ShowerRain;
+        }
+        else if(condition === 'tstorms' || condition === 'chancetstorms'){
           condition = conditions.Thunderstorm;
         }
-        else if(condition === 'snow' || condition === 'sleet' || condition === 'flurries'){
-          condition = conditions.Thunderstorm;
+        else if(condition === 'snow' || condition === 'chancesnow' || condition === 'sleet' || condition === 'flurries'){
+          condition = conditions.Snow;
         }
         else if(condition === 'fog' || condition === 'hazy'){
           condition = conditions.Mist;
